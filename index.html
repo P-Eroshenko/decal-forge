@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self'; object-src 'none'"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Decal Forge</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<header><div class="brand"><span class="logo">◩</span><div>DECAL <b>FORGE</b><small>PNG → SVG · TRIM SHEET TOOLKIT</small></div></div><div class="header-actions"><span class="local">● Всё на вашем компьютере</span><button id="import" class="primary">＋ Открыть PNG</button></div></header>
+<main>
+<aside class="settings"><div class="section-head">01 <span>ПОДГОТОВКА</span></div><h2>Убрать лишнее.</h2><p class="muted">Удалите фон на всём изображении перед нарезкой.</p>
+<label class="toggle"><input id="bgEnabled" type="checkbox"> Удаление фона</label>
+<div class="row"><input id="bgColor" type="color" value="#ffffff" aria-label="Цвет фона"><button id="eyedropper">⌖ Пипетка</button></div>
+<label>Допуск цвета <output id="toleranceValue">24</output><input id="tolerance" type="range" min="0" max="160" value="24"></label>
+<label class="toggle"><input id="connected" type="checkbox" checked> Только фон от краёв</label><p class="hint">Сохраняет похожие цвета внутри замкнутых деталей. Выключите для удаления цвета везде.</p>
+<button id="restore" class="wide">Восстановить исходник</button>
+<div class="divider"></div><div class="section-head">02 <span>ВЕКТОРИЗАЦИЯ</span></div>
+<label>Профиль<select id="preset"><option value="geometry" selected>Геометрия декали</option><option value="logo">Логотип / текст</option><option value="detailed">Сохранить фактуру</option><option value="custom">Свои настройки</option></select></label>
+<p class="hint">Сплошная заливка защищена. Настоящие прозрачные отверстия сохраняются.</p>
+<label>Режим<select id="mode"><option value="color">Цветной SVG</option><option value="mask">Чёрная маска по яркости</option></select></label>
+<label>Количество цветов<select id="colors"><option>2</option><option>4</option><option>8</option><option selected>16</option><option>32</option><option>64</option></select></label>
+<label>Точность контура<select id="detail"><option value="0.3" selected>Высокая · больше узлов</option><option value="1">Сбалансированная</option><option value="2.5">Сглаженная · меньше узлов</option></select></label>
+<label>Упростить фактуру<select id="smoothing"><option value="0">Нет · для текста и знаков</option><option value="1" selected>Слабо · сохранить тонкие детали</option><option value="2">Умеренно</option><option value="3">Сильно · только крупные формы</option></select></label>
+<label>Объединять мелкие пятна<select id="noise"><option value="0">Нет · сохранить детали</option><option value="4" selected>До 4 пикселей</option><option value="12">До 12 пикселей</option><option value="24">До 24 пикселей</option></select></label>
+<p class="hint">Пятна получают соседний цвет, а не прозрачность. Для тонких надписей выберите «Логотип / текст».</p>
+<label>Порог яркости маски <output id="thresholdValue">160</output><input id="threshold" type="range" min="0" max="255" value="160"></label>
+<label>Порог прозрачности <output id="alphaValue">128</output><input id="alpha" type="range" min="1" max="255" value="128"></label>
+<p class="hint">Больше цветов сохраняет больше фактуры. Для чистой геометрии начните с 8–16 цветов.</p>
+</aside>
+<section class="workspace"><div class="toolbar"><div class="tabs"><button id="rasterTab" class="active">Изображение</button><button id="preview">Предпросмотр SVG</button></div><div class="zoom"><button id="zoomOut" aria-label="Уменьшить">−</button><span id="zoomLabel">100%</span><button id="zoomIn" aria-label="Увеличить">＋</button><button id="fit">Вписать</button></div></div>
+<div id="viewport"><div id="empty"><div class="empty-icon">◩</div><span class="eyebrow">ИЗ ТЕКСТУРЫ В КОНТУР</span><h1>Ваша следующая декаль<br>начинается здесь.</h1><p>Откройте PNG или перетащите его в окно.<br>Выделите нужные элементы и сохраните их отдельно.</p><button id="emptyImport" class="primary">Открыть изображение</button><span class="formats">PNG с прозрачностью · Trim sheets · Маски</span></div><div id="stage" hidden><canvas id="canvas"></canvas><svg id="selectionLayer"></svg></div><div id="vectorStage" hidden><img id="vectorImage" alt="Предпросмотр векторного результата"></div></div>
+<div class="canvas-footer"><span id="imageInfo">Изображение не загружено</span><span id="toolHint">Протяните мышью для выделения области</span></div>
+</section>
+<aside class="regions"><div class="section-head">03 <span>ФРАГМЕНТЫ</span><span id="count" class="badge">0</span></div><h2>Каждая деталь отдельно.</h2><p class="muted">Каждый прямоугольник станет отдельным файлом.</p><div class="row"><button id="addFull">＋ Всё изображение</button><button id="clear" title="Удалить все выделения">Очистить</button></div><div id="regionList"><p class="list-empty">Пока нет фрагментов.<br>Нарисуйте прямоугольник на изображении.</p></div><div class="export-panel"><label class="toggle"><input id="alsoPNG" type="checkbox" checked> Также сохранить PNG с альфой</label><p class="hint">PNG удобно использовать как текстуру или маску декали.</p><button id="export" class="primary wide">Экспортировать SVG <span>↗</span></button><p class="hint">Без выделений экспортируется всё изображение. Существующие файлы не заменяются.</p></div></aside>
+</main><footer><span id="status">Готов к работе</span><button id="openFolder" hidden>Открыть папку экспорта ↗</button><span>DECAL FORGE / 1.1</span></footer><script src="core.js"></script><script src="renderer.js"></script></body></html>

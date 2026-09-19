@@ -1,0 +1,22 @@
+{
+  "name": "decal-forge",
+  "version": "1.1.0",
+  "description": "PNG to SVG desktop trim-sheet cutter",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "test:smoke": "node tests/smoke.cjs",
+    "package": "node package-app.mjs"
+  },
+  "dependencies": {
+    "imagetracerjs": "1.2.6"
+  },
+  "devDependencies": {
+    "@electron/packager": "20.3.0",
+    "electron": "44.4.3",
+    "playwright": "1.62.1",
+    "sharp": "0.35.4"
+  },
+  "license": "MIT"
+}
